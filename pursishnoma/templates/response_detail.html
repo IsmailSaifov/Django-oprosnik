@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+    <title>Ответы {{ item.session_id }}</title>
+
+    <!-- Подключение Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+
+<body>
+    <div class="container">
+
+        <h1 class="mt-5">Ответы для session_id: {{ session_id }}</h1>
+
+        {% for response in responses %}
+        <div class="card mt-3">
+            <div class="card-body">
+                {% if response.question_main %}
+                <h5 class="card-title">{{ response.question_main }}</h5>
+                {% endif %}
+                {% if response.question %}
+                <h6 class="card-subtitle mb-2 text-muted">{{ response.question }}</h6>
+                {% endif %}
+                <p class="card-text">
+                    {% if response.choice %}
+                    <strong>Ответ:</strong> {{ response.choice }}
+                    {% endif %}
+                    {% if response.text_response %}
+                    <strong>Другой вариант ответа:</strong> {{ response.text_response }}
+                    {% endif %}
+                </p>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    <!-- Подключение Bootstrap JS (необязательно) -->
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+
+</html>

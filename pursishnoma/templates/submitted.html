@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Пурсишнома</title>
+    <!-- Подключаем Bootstrap CSS -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        /* Дополнительные стили для центрирования элементов */
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        /* Анимация галочки */
+        @keyframes draw {
+            0% {
+                stroke-dasharray: 0, 24;
+                stroke-dashoffset: 0;
+            }
+            50% {
+                stroke-dasharray: 24, 24;
+                stroke-dashoffset: -12;
+            }
+            100% {
+                stroke-dasharray: 24, 24;
+                stroke-dashoffset: -24;
+            }
+        }
+
+        /* Стили для галочки */
+        .checkmark {
+            width: 40px;
+            height: 40px;
+            stroke-width: 2;
+            stroke: #1abc9c;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+            fill: none;
+            animation: draw 2s ease-out infinite;
+        }
+    </style>
+</head>
+<body>
+    <div class="container text-center">
+        <div class="jumbotron">
+            <h1 class="display-5">Ташакур барои чавоб гардонидан ба саволхо!</h1>
+            <p class="lead">Чавобхои шумо сабт шуд! Бо максади шаффофият маълумотхои шумо сабт намешавад.</p>
+            <!-- Дополнительный HTML-код для отображения пользователю -->
+            <svg class="checkmark" viewBox="0 0 24 24">
+                <path d="M22 2L8 18L2 12"></path>
+            </svg>
+        </div>
+        <a href="{% url 'survey' %}" class="btn btn-secondary">
+            Ба кафо &nbsp;
+        </a>
+    </div>
+    <!-- Подключаем Bootstrap JS (необязательно, если не используем JS) -->
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>

@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Пурсишнома</title>
+    <!-- Подключение Bootstrap CSS -->
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+
+</head>
+
+<body>
+    <style>
+        table {
+            border-collapse: collapse;
+            width: 100%;
+        }
+
+        th,
+        td {
+            border: 1px solid #dddddd;
+            text-align: left;
+            padding: 8px;
+        }
+
+        th {
+            background-color: #f2f2f2;
+        }
+
+        .border {
+            border: none;
+            /* Remove all borders */
+            background-color: transparent;
+            /* Remove background color */
+        }
+    </style>
+
+    <div style="display: flex; justify-content: center;">
+        <p>
+        <h2> Пурсишнома </h2>
+        </p>
+    </div>
+    <div style="display: flex; justify-content: center;">
+        <p>
+        <h4> хангоми аз кор озодшавии корманд </h4>
+        </p>
+    </div>
+
+    <div class="container mt-1" style="display: flex; justify-content: center;">
+        <p>
+        <h4> Пурсишномаи мазкур бо максади тахлили сабабу омилхои аз кор озодшавии кормандон тартиб дода шудааст.
+            Маълумоти пурсидашаванда бе дарч намудани ному насаби корманд, танхо бо максади бехтар намудани шароити
+            кории кормандон истифода бурда мешавад. Ба саволхо вокеъбинома ва хосилона чавоб гардонед. </h4>
+        </p>
+    </div>
+
+    <div class="container mt-2">
+        {% for message in messages %}
+        <div class="alert alert-{{ message.tags }}" role="alert">
+            {{ message }}
+        </div>
+        {% endfor %}
+
+        <form action="{% url 'submit_survey' %}" method="POST" onsubmit="return validateForm()">
+            {% csrf_token %}
+            {% for question in questions %}
+            {% if not question.question_main and not question.only_text %}
+            <div class="form-group">
+                <h4>{{ question.question_text }}</h4>
+                {% for choice in question.choice_set.all %}
+                <div class="form-check">
+                    <input class="form-check-input" type="radio" name="choice_{{ question.id }}"
+                        id="choice_{{ choice.id }}" value="{{ choice.id }}" required>
+                    <label class="form-check-label" for="choice_{{ choice.id }}">{{ choice.choice_text }}</label>
+                </div>
+                {% endfor %}
+                {% if question.requires_text_response %}
+                <input type="text" class="form-control" name="question_{{ question.id }}_text_response"
+                    placeholder="Другой вариант ответа">
+                {% endif %}
+            </div>
+            {% endif %}
+            {% endfor %}
+
+
+            <!--хУЕВЫЕ ВОПРОСЫ-->
+            {% for main_question in main_questions %}
+            <table class="table table-borderless">
+                <tr>
+                    <td colspan="2">
+                        <h4>{{ main_question.question_main }}</h4>
+                        {% for question in main_question.question_set.all %}
+                        {% if forloop.first %}
+                        {% for choice in question.choice_set.all %}
+                    <td>
+                        {{ choice.choice_text }}
+                    </td>
+                    {% endfor %}
+                    {% endif %}
+                    {% endfor %}
+                    </td>
+                </tr>
+                {% for question in main_question.question_set.all %}
+                <tr>
+                    <td colspan="2">
+                        {{ question.question_text }}
+                    </td>
+
+                    {% for choice in question.choice_set.all %}
+                    <td>
+                        <input type="radio" name="{{ question.id }}" value="{{ choice.id }}" required>
+                    </td>
+                    {% endfor %}
+                </tr>
+                {% endfor %}
+            </table>
+            <br>
+            {% endfor %}
+
+            <!--  Вопросы только с текстом   -->
+
+            {% for question in questions %}
+            {% if question.only_text %}
+            <div class="form-group">
+                <h4>{{ question.question_text }}</h4>
+                {% if question.requires_text_response %}
+                <input type="text" class="form-control" name="question_{{ question.id }}_text_response"
+                    placeholder="Другой вариант ответа" required>
+                {% endif %}
+            </div>
+            {% endif %}
+            {% endfor %}
+
+
+            <div style="display: flex; justify-content: center; gap: 10px; margin-bottom: 20px;">
+                <button type="submit" class="btn btn-primary mt-3" onclick="return validateForm()">Сабт намудан</button>
+                <!-- Кнопка "Назад" -->
+                <button type="button" class="btn btn-secondary mt-3" onclick="goBack()">Ба кафо</button>
+            </div>
+        </form>
+    </div>
+
+
+
+    <script>
+
+        function validateForm() {
+            var textInputs = document.querySelectorAll('input[type="text"]');
+            textInputs.forEach(function (input) {
+                if (input.value.trim() !== '') {
+                    input.removeAttribute('required');
+                }
+            });
+            return true; // Можете вернуть false, если нужно прервать отправку формы в определенных случаях
+        }
+
+    </script>
+</body>
+
+</html>
